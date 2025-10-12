@@ -211,7 +211,7 @@ Hệ thống được thiết kế theo mô hình **3-tier AWS Cloud Architectur
 
 ---
 
-<!-- Lightweight style for nicer tables & images -->
+{% raw %}
 <style>
 table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
 th, td { border:1px solid #e5e7eb; padding:8px 10px; }
@@ -219,3 +219,4 @@ th { background:#f7f7f7; font-weight:600; }
 tbody tr:nth-child(even){ background:#fbfbfb; }
 img { display:block; margin:18px auto; border-radius:10px; max-width:920px; }
 </style>
+{% endraw %}
