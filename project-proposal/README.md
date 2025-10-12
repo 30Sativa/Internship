@@ -1,462 +1,201 @@
-# 📊 Project Proposal Guidelines - FCJ Internship
+# 🩸 Blood Donation Support System (BDSS)  
+## Phần mềm hỗ trợ hiến máu thông minh trên AWS Cloud  
 
-[![Documentation](https://img.shields.io/badge/Type-Documentation-blue)](https://github.com/AWS-First-Cloud-Journey/Internship)
-[![Weight](https://img.shields.io/badge/Weight-50%25-red)](https://github.com/AWS-First-Cloud-Journey/Internship)
-[![Required](https://img.shields.io/badge/Status-Required-red)](https://github.com/AWS-First-Cloud-Journey/Internship)
-
-## 🎯 Mục đích Project Proposal
-
-Project Proposal là **deliverable quan trọng nhất** (50% tổng điểm) trong chương trình FCJ Internship. Đây không chỉ là bài tập mà là cơ hội để:
-
-- **🏗️ Architecture Design**: Thiết kế giải pháp AWS cho bài toán thực tế
-- **💼 Business Analysis**: Phân tích business case và ROI
-- **📝 Technical Writing**: Phát triển kỹ năng viết kỹ thuật chuyên nghiệp
-- **🎯 Career Preparation**: Chuẩn bị cho việc làm việc với clients và stakeholders
+[![Type](https://img.shields.io/badge/Type-Healthcare%20Cloud%20Solution-blue)]()
+[![Weight](https://img.shields.io/badge/Weight-50%25-red)]()
+[![Status](https://img.shields.io/badge/Status-Completed-success)]()
 
 ---
 
-## ✅ Yêu cầu cơ bản
+# 📄 Executive Summary  
 
-### Scope và Chủ đề
-- **Focus**: AWS Cloud Solutions cho real-world problems
-- **Industries**: E-commerce, Healthcare, Education, FinTech, Media, etc.
-- **Complexity**: Intermediate level - không quá đơn giản, không quá phức tạp
-- **Innovation**: Có elements sáng tạo và modern practices
+**Blood Donation Support System (BDSS)** là nền tảng web thông minh giúp **kết nối người hiến máu với người cần máu**, **quản lý tồn kho máu**, và **điều phối ca hiến máu khẩn cấp** thông qua hệ thống matching tự động, dashboard realtime và quy trình hiến máu tự động.  
 
-### Độ dài và Format
-- **Length**: 15-25 trang (không tính appendices)
-- **Format**: Professional document với diagrams và charts
-- **Language**: Tiếng Việt hoặc tiếng Anh (consistent throughout)
-- **Structure**: 8 phần bắt buộc theo template
+Giải pháp giải quyết vấn đề cấp thiết: **thiếu hệ thống tập trung để quản lý hiệu quả nguồn cung cấp máu và xử lý ca khẩn cấp**.  
 
-### Chất lượng Content
-- **Technical Accuracy**: Thông tin kỹ thuật chính xác
-- **Business Viability**: Giải pháp khả thi về mặt business
-- **Cost Realistic**: Ước tính chi phí realistic và detailed
-- **Implementation Feasible**: Kế hoạch triển khai thực tế
+Hệ thống được xây dựng theo kiến trúc **3-tier trên AWS Cloud**, bao gồm:  
+- **Frontend**: ReactJS SPA hiện đại, hỗ trợ tìm kiếm theo vị trí và quản lý ca hiến.  
+- **Backend**: C# .NET Web API xử lý nghiệp vụ y tế, REST API và matching algorithms.  
+- **Database**: SQL Server triển khai trên EC2 (PostGIS cho dữ liệu vị trí).  
+- **Auth**: AWS Cognito quản lý xác thực và phân quyền người dùng.  
+- **Realtime**: AWS AppSync (GraphQL Subscriptions) cho cảnh báo khẩn cấp realtime.  
+- **Notifications**: SNS/SES gửi thông báo và email khẩn cấp.  
+- **Storage**: S3 lưu trữ hồ sơ và tài liệu y tế.  
 
----
-
-## 📋 8 Phần bắt buộc của Proposal
-
-### 1. 📄 Executive Summary (10%)
-**Mục đích**: Tóm tắt toàn bộ proposal trong 2-3 trang
-
-**Nội dung bao gồm**:
-- Problem statement ngắn gọn
-- Solution overview với key features
-- Business benefits và ROI summary
-- Investment required và timeline
-- Success metrics và expected outcomes
-
-**Evaluation Criteria**:
-- Clarity và conciseness
-- Compelling business case
-- Accurate summary của main points
-- Executive-level language
-
-### 2. 🎯 Problem Statement (15%)
-**Mục đích**: Định nghĩa rõ ràng vấn đề cần giải quyết
-
-**Nội dung bao gồm**:
-- Current situation analysis
-- Pain points identification với quantified impact
-- Stakeholders affected và their concerns
-- Business consequences của inaction
-- Market opportunity (nếu applicable)
-
-**Evaluation Criteria**:
-- Problem clearly defined và well-researched
-- Quantified impact với data/statistics
-- Stakeholder analysis comprehensive
-- Business case compelling
-
-### 3. 🏗️ Solution Architecture (25%)
-**Mục đích**: Thiết kế kiến trúc kỹ thuật chi tiết
-
-**Nội dung bao gồm**:
-- High-level architecture diagram
-- AWS services selection với justification
-- Component interactions và data flow
-- Security architecture và compliance
-- Scalability và performance considerations
-- Integration points với existing systems
-
-**Evaluation Criteria**:
-- Architecture technically sound
-- AWS services appropriately chosen
-- Security properly addressed
-- Scalability designed in
-- Diagrams clear và professional
-
-### 4. 🔧 Technical Implementation (20%)
-**Mục đích**: Chi tiết cách triển khai kỹ thuật
-
-**Nội dung bao gồm**:
-- Implementation phases với deliverables
-- Technical requirements (compute, storage, network)
-- Development approach và methodologies
-- Testing strategy (unit, integration, performance)
-- Deployment plan và rollback procedures
-- Configuration management
-
-**Evaluation Criteria**:
-- Implementation plan detailed và realistic
-- Technical requirements well-defined
-- Testing strategy comprehensive
-- Deployment approach sound
-- Risk mitigation considered
-
-### 5. 📅 Timeline & Milestones (10%)
-**Mục đích**: Lập kế hoạch thời gian chi tiết
-
-**Nội dung bao gồm**:
-- Project phases breakdown
-- Key milestones với success criteria
-- Dependencies identification
-- Critical path analysis
-- Resource allocation plan
-- Buffer time cho risks
-
-**Evaluation Criteria**:
-- Timeline realistic và achievable
-- Milestones clearly defined
-- Dependencies properly identified
-- Resource allocation logical
-- Contingency planning included
-
-### 6. 💰 Budget Estimation (10%)
-**Mục đích**: Ước tính chi phí chi tiết và chính xác
-
-**Nội dung bao gồm**:
-- AWS infrastructure costs (monthly/annual)
-- Development costs (one-time)
-- Third-party services và licenses
-- Operational costs (ongoing)
-- ROI calculation và break-even analysis
-- Cost optimization strategies
-
-**Evaluation Criteria**:
-- Cost estimates accurate và detailed
-- ROI calculation realistic
-- All cost categories covered
-- Optimization strategies included
-- Business case financially sound
-
-### 7. ⚠️ Risk Assessment (5%)
-**Mục đích**: Xác định và quản lý rủi ro dự án
-
-**Nội dung bao gồm**:
-- Risk identification (technical, business, operational)
-- Impact assessment và probability analysis
-- Risk matrix với prioritization
-- Mitigation strategies cho each risk
-- Contingency plans
-- Monitoring và escalation procedures
-
-**Evaluation Criteria**:
-- Risks comprehensively identified
-- Impact assessment realistic
-- Mitigation strategies practical
-- Contingency plans detailed
-- Risk monitoring planned
-
-### 8. 🎯 Expected Outcomes (5%)
-**Mục đích**: Định nghĩa success và benefits mong đợi
-
-**Nội dung bao gồm**:
-- Success metrics (technical và business)
-- Short-term benefits (0-6 months)
-- Medium-term benefits (6-18 months)
-- Long-term value (18+ months)
-- User experience improvements
-- Strategic capabilities gained
-
-**Evaluation Criteria**:
-- Success metrics measurable
-- Benefits realistic và quantified
-- Timeline for benefits reasonable
-- Strategic value articulated
-- User impact considered
+📈 **Lợi ích chính**  
+- Giảm **60% thời gian xử lý ca khẩn cấp** nhờ matching tự động.  
+- Tăng **40% hiệu quả quản lý tồn kho máu** với hệ thống cảnh báo thông minh.  
+- ROI sau **~6 tháng** nhờ chi phí thấp (~30–35 USD/tháng).  
 
 ---
 
-## 🎨 Template Structure
+# 1. 🎯 Problem Statement  
 
-```markdown
-# [Project Title]
-## [Subtitle describing the solution]
+## 🩸 Current Situation  
+Các cơ sở y tế hiện nay vẫn quản lý hiến máu thủ công — gọi điện, đăng bài, hoặc tra cứu qua Excel. Hệ thống này **thiếu khả năng realtime**, **không có cảnh báo khẩn cấp**, và **không thể tự động matching** giữa người hiến và người cần máu.  
 
----
+## ⚠️ Key Challenges  
+- ❌ Không có hệ thống **matching tự động** theo nhóm máu và vị trí.  
+- ❌ Thiếu khả năng **realtime alert** cho ca khẩn.  
+- ❌ Không có công cụ **dashboard phân tích tồn kho**.  
+- ❌ Quy trình hiến máu **thủ công và rời rạc**.  
 
-# Executive Summary
-[2-3 pages summarizing the entire proposal]
+## 👩‍⚕️ Stakeholder Impact  
+| Vai trò | Vấn đề chính |
+|----------|---------------|
+| Người hiến máu | Không biết khi nào cần, không được nhắc nhở |
+| Người cần máu | Khó tìm người hiến phù hợp, thiếu realtime |
+| Nhân viên y tế | Quản lý thủ công, dễ sai sót |
+| Cơ sở y tế | Thiếu dữ liệu phân tích, khó dự báo nguồn máu |
 
-# 1. Problem Statement
-## Current Situation
-## Key Challenges
-## Stakeholder Impact
-## Business Consequences
-
-# 2. Solution Architecture
-## Architecture Overview
-## AWS Services Used
-## Component Design
-## Security Architecture
-## Scalability Design
-
-# 3. Technical Implementation
-## Implementation Phases
-## Technical Requirements
-## Development Approach
-## Testing Strategy
-## Deployment Plan
-
-# 4. Timeline & Milestones
-## Project Timeline
-## Key Milestones
-## Dependencies
-## Resource Allocation
-
-# 5. Budget Estimation
-## Infrastructure Costs
-## Development Costs
-## Operational Costs
-## ROI Analysis
-
-# 6. Risk Assessment
-## Risk Matrix
-## Mitigation Strategies
-## Contingency Plans
-
-# 7. Expected Outcomes
-## Success Metrics
-## Business Benefits
-## Technical Improvements
-## Long-term Value
+## 📉 Business Consequences  
+Nếu không có giải pháp, cơ sở y tế tiếp tục **chậm xử lý ca khẩn cấp** và **quản lý tồn kho kém hiệu quả**, ảnh hưởng trực tiếp đến tính mạng bệnh nhân.  
 
 ---
 
-# Appendices
-## A. Technical Specifications
-## B. Cost Calculations
-## C. Architecture Diagrams
-## D. References
-```
+# 2. 🏗️ Solution Architecture  
+
+## 🏗️ Architecture Overview  
+
+![AWS Architecture](aws%20new.png)  
+
+Hệ thống được thiết kế theo mô hình **3-tier AWS Cloud Architecture**, gồm:  
+
+### **1️⃣ Edge & Frontend Layer**
+- **Amazon CloudFront** – CDN phân phối nội dung web.  
+- **Amazon S3 (Frontend)** – Lưu ReactJS SPA, CSS, JS.  
+- **Amazon Cognito** – Quản lý đăng nhập, phân quyền (Donor, Requester, Staff, Admin).  
+
+### **2️⃣ Application & API Layer**
+- **Amazon EC2** – Host .NET Web API xử lý logic nghiệp vụ.  
+- **AWS Lambda** – Task automation & blood-matching engine.  
+- **AWS Location Service** – Tìm người hiến gần nhất qua GPS.  
+- **Amazon SNS / Pinpoint** – Gửi SMS/email khi có ca khẩn.  
+
+### **3️⃣ Data & Analytics Layer**
+- **SQL Server (EC2)** – Lưu hồ sơ, nhóm máu, ca hiến, tồn kho.  
+- **Amazon S3 (Data)** – Lưu logs, chứng nhận, báo cáo.  
+- **Amazon QuickSight** – Dashboard realtime & thống kê hiệu suất.  
+
+## 🔧 AWS Services Used
+| Service | Vai trò |
+|----------|----------|
+| **EC2** | Chạy .NET API & SQL Server |
+| **S3** | Lưu ảnh, tài liệu, chứng nhận |
+| **Cognito** | Xác thực và phân quyền |
+| **Lambda** | Tác vụ tự động, nhắc nhở |
+| **SNS / Pinpoint** | Gửi thông báo khẩn cấp |
+| **Location Service** | Định vị & tìm người hiến gần nhất |
+| **QuickSight** | Dashboard phân tích dữ liệu |
+
+## 🔐 Security Architecture  
+- **AWS Cognito**: JWT + RBAC  
+- **IAM Roles chi tiết** cho Lambda, S3, SES  
+- **HTTPS + AWS WAF** cho API Gateway  
+- **Mã hóa dữ liệu y tế (AES-256)** khi nghỉ và khi truyền tải  
+- Tuân thủ **HIPAA compliance**  
+
+## ⚙️ Scalability Design  
+- EC2 Auto Scaling + Multi-AZ database  
+- S3, SNS, AppSync auto-scale  
+- PostGIS indexing cho tìm kiếm địa lý nhanh  
 
 ---
 
-## 💡 Chọn chủ đề Project
+# 3. 🔧 Technical Implementation  
 
-### Recommended Industries
+## 🧩 Implementation Phases
+| Giai đoạn | Nội dung chính | Deliverables |
+|------------|----------------|---------------|
+| Phase 1 | Requirements & Design | PRD, ERD, Blood Compatibility Matrix |
+| Phase 2 | Backend API | .NET API, SQL schema |
+| Phase 3 | Frontend UI | React SPA, Donor Portal |
+| Phase 4 | Auth & Matching | Cognito RBAC, matching logic |
+| Phase 5 | Notifications | SNS/SES alerts, AppSync realtime |
+| Phase 6 | Testing & Deployment | CI/CD pipeline, HIPAA compliance |
 
-#### 🛒 E-Commerce & Retail
-- **Multi-vendor marketplace** với microservices
-- **Omnichannel retail platform** với inventory management
-- **Personalized recommendation engine** với ML
-- **Supply chain optimization** với IoT và analytics
+## ⚙️ Technical Requirements  
+- EC2 t3.small (API + DB)  
+- S3 (10GB storage)  
+- Lambda 256MB (auto reminders)  
+- SES/SNS 5.000+ messages/tháng  
 
-#### 🏥 Healthcare & Life Sciences
-- **Telemedicine platform** với video conferencing
-- **Electronic Health Records (EHR)** system
-- **Medical imaging processing** với AI/ML
-- **Drug discovery platform** với HPC
+## 🧠 Development Approach  
+- Agile (2-week sprint)  
+- RESTful API + GraphQL Subscriptions  
+- IaC bằng Terraform  
+- Tuân thủ chuẩn y tế (HIPAA)  
 
-#### 🎓 Education & E-Learning
-- **Learning Management System (LMS)** với scalability
-- **Virtual classroom platform** với real-time collaboration
-- **Student performance analytics** với data lake
-- **Content delivery network** cho educational content
+## 🧪 Testing Strategy  
+- **Unit Test**: xUnit cho logic matching  
+- **Integration**: Postman workflows  
+- **Load Test**: JMeter (emergency flow)  
+- **UI Test**: Cypress (donor journey)  
 
-#### 💰 FinTech & Banking
-- **Digital banking platform** với security focus
-- **Payment processing system** với fraud detection
-- **Robo-advisor platform** với ML algorithms
-- **Blockchain-based solutions** cho transparency
-
-#### 📱 Media & Entertainment
-- **Video streaming platform** với global CDN
-- **Social media analytics** với big data
-- **Gaming backend infrastructure** với real-time features
-- **Content management system** với AI moderation
-
-#### 🏭 Manufacturing & IoT
-- **Smart factory monitoring** với IoT sensors
-- **Predictive maintenance** với ML models
-- **Supply chain visibility** với blockchain
-- **Quality control automation** với computer vision
-
-### Project Complexity Levels
-
-#### ⭐ Beginner-Friendly (Not Recommended)
-- Simple CRUD applications
-- Basic static websites
-- Single-service solutions
-
-#### ⭐⭐ Intermediate (Recommended)
-- Multi-tier applications với 3-5 AWS services
-- Microservices architecture với API Gateway
-- Data processing pipelines
-- ML-powered applications
-
-#### ⭐⭐⭐ Advanced (For Experienced)
-- Complex distributed systems
-- Multi-region deployments
-- Advanced ML/AI implementations
-- Enterprise-grade solutions
+## 🚀 Deployment Plan  
+- CI/CD qua **GitHub Actions**  
+- Blue-green deployment trên EC2  
+- Backup & DR cho dữ liệu y tế  
+- Compliance audit logging  
 
 ---
 
-## 🔧 Tools và Resources
+# 4. 📅 Timeline & Milestones  
 
-### Architecture Design
-- **Draw.io**: Free diagramming tool
-- **Lucidchart**: Professional diagramming
-- **AWS Architecture Icons**: Official AWS icons
-- **Cloudcraft**: AWS architecture visualization
-
-### Cost Estimation
-- **AWS Pricing Calculator**: Official cost estimation
-- **AWS Cost Explorer**: Historical cost analysis
-- **Infracost**: Infrastructure cost estimation
-- **CloudHealth**: Cost optimization tools
-
-### Documentation
-- **Notion**: All-in-one workspace
-- **Confluence**: Team documentation
-- **GitBook**: Beautiful documentation
-- **Markdown**: Simple formatting
-
-### Research Tools
-- **AWS Case Studies**: Real customer implementations
-- **AWS Whitepapers**: Best practices và patterns
-- **Gartner Reports**: Industry analysis
-- **Stack Overflow**: Technical Q&A
+| Giai đoạn | Thời gian | Kết quả |
+|------------|------------|----------|
+| Week 1–2 | Requirement & Design | PRD, ERD, Matrix |
+| Week 3–5 | Backend API | CRUD + Matching logic |
+| Week 6–8 | Frontend | Donor portal, emergency alerts |
+| Week 9–10 | Notifications | SNS/SES + AppSync |
+| Week 11 | Testing | Load + Compliance test |
+| Week 12 | Deployment | EC2 + Demo Presentation |
 
 ---
 
-## 📊 Evaluation Rubric
+# 5. 💰 Budget Estimation  
 
-### Technical Excellence (40%)
-| Criteria | Excellent (90-100%) | Good (80-89%) | Satisfactory (70-79%) | Needs Improvement (<70%) |
-|----------|-------------------|---------------|---------------------|------------------------|
-| **Architecture Design** | Innovative, scalable, secure | Well-designed, follows best practices | Functional, meets requirements | Basic, has significant gaps |
-| **AWS Services Selection** | Optimal choices, well-justified | Good choices, mostly appropriate | Adequate choices, some issues | Poor choices, not justified |
-| **Technical Depth** | Deep understanding evident | Good technical knowledge | Basic understanding | Superficial treatment |
+| Thành phần | Chi phí/tháng |
+|-------------|---------------|
+| EC2 (t3.small) | ~$15 |
+| S3 Storage (10GB) | ~$3 |
+| Cognito | ~$0 (Free 50k MAU) |
+| SNS/SES (5k alerts) | ~$8 |
+| Lambda | ~$4 |
+| **Tổng cộng** | **~$30–35 / tháng** |
 
-### Business Viability (30%)
-| Criteria | Excellent (90-100%) | Good (80-89%) | Satisfactory (70-79%) | Needs Improvement (<70%) |
-|----------|-------------------|---------------|---------------------|------------------------|
-| **Problem Definition** | Clear, compelling, well-researched | Well-defined, good research | Adequately defined | Vague, poorly researched |
-| **Business Case** | Strong ROI, compelling benefits | Good business case | Adequate justification | Weak business case |
-| **Market Understanding** | Deep market insight | Good market knowledge | Basic understanding | Limited market awareness |
-
-### Implementation Feasibility (20%)
-| Criteria | Excellent (90-100%) | Good (80-89%) | Satisfactory (70-79%) | Needs Improvement (<70%) |
-|----------|-------------------|---------------|---------------------|------------------------|
-| **Timeline** | Realistic, well-planned | Mostly realistic | Somewhat optimistic | Unrealistic |
-| **Resource Planning** | Comprehensive, detailed | Well-planned | Basic planning | Poor planning |
-| **Risk Management** | Thorough risk analysis | Good risk identification | Basic risk assessment | Inadequate risk planning |
-
-### Presentation Quality (10%)
-| Criteria | Excellent (90-100%) | Good (80-89%) | Satisfactory (70-79%) | Needs Improvement (<70%) |
-|----------|-------------------|---------------|---------------------|------------------------|
-| **Writing Quality** | Professional, clear, engaging | Well-written, clear | Adequate writing | Poor writing quality |
-| **Visual Design** | Professional diagrams, charts | Good visuals | Basic visuals | Poor or missing visuals |
-| **Organization** | Logical flow, easy to follow | Well-organized | Adequately organized | Poor organization |
+📊 **ROI**: Giảm 70% chi phí quản lý thủ công (~100 USD/tháng) → Hoàn vốn sau **6 tháng**.
 
 ---
 
-## 🎯 Success Tips
+# 6. ⚠️ Risk Assessment  
 
-### 1. Start with Real Problems
-```markdown
-❌ "Build a website for a company"
-✅ "Modernize legacy e-commerce platform to handle 10x traffic growth 
-   during peak seasons while reducing operational costs by 40%"
-```
-
-### 2. Quantify Everything
-```markdown
-❌ "Improve performance"
-✅ "Reduce page load time from 3.2s to <500ms, increase conversion 
-   rate by 25%, handle 50,000 concurrent users"
-```
-
-### 3. Show Your Research
-```markdown
-✅ "According to Gartner 2024 report, 85% of enterprises will adopt 
-   cloud-first strategy by 2025. Current solution costs $50K/month 
-   vs proposed AWS solution at $18K/month (64% reduction)"
-```
-
-### 4. Think Like a Consultant
-- **Client Perspective**: What would a real client care about?
-- **Business Impact**: How does this solve business problems?
-- **Competitive Advantage**: What makes this solution unique?
-- **Scalability**: How does this grow with the business?
-
-### 5. Use Real Data
-- **Market Research**: Industry reports, competitor analysis
-- **AWS Pricing**: Actual pricing from AWS Calculator
-- **Performance Benchmarks**: Real performance metrics
-- **Case Studies**: Similar implementations
+| Rủi ro | Ảnh hưởng | Xác suất | Giảm thiểu |
+|--------|-----------|----------|-------------|
+| Chi phí vượt dự kiến | Medium | Medium | Free-tier + monitoring |
+| Tải cao trong ca khẩn cấp | High | Low | AppSync auto-scale |
+| Bảo mật dữ liệu y tế | High | Medium | Cognito + WAF + IAM Roles |
+| Lỗi matching | Critical | Low | Medical validation test |
+| Notification fail | High | Medium | Multi-channel + retry queue |
+| Donor no-show | Medium | High | Backup matching logic |
 
 ---
 
-## 📚 Learning Resources
+# 7. 🎯 Expected Outcomes  
 
-### AWS Architecture
-- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
-- [AWS Architecture Center](https://aws.amazon.com/architecture/)
-- [AWS Solutions Library](https://aws.amazon.com/solutions/)
-- [AWS Reference Architectures](https://aws.amazon.com/architecture/reference-architecture-diagrams/)
-
-### Business Analysis
-- [Harvard Business Review](https://hbr.org/)
-- [McKinsey Insights](https://www.mckinsey.com/insights)
-- [Gartner Research](https://www.gartner.com/en/research)
-- [Forrester Research](https://www.forrester.com/research/)
-
-### Technical Writing
-- [Google Technical Writing Courses](https://developers.google.com/tech-writing)
-- [AWS Documentation Style Guide](https://docs.aws.amazon.com/style-guide/)
-- [Microsoft Writing Style Guide](https://docs.microsoft.com/en-us/style-guide/)
-
-### Industry Reports
-- [AWS Customer Case Studies](https://aws.amazon.com/solutions/case-studies/)
-- [Cloud Computing Market Reports](https://www.marketsandmarkets.com/Market-Reports/cloud-computing-market-234.html)
-- [Digital Transformation Studies](https://www.idc.com/research/digital-transformation)
+- ⚙️ **Technical**: Cloud-native architecture, >5.000 users, 100+ cases/tháng.  
+- 🩸 **Healthcare**: Giảm 60% thời gian phản hồi ca khẩn.  
+- 📊 **Business**: ROI đạt sau 6 tháng, chi phí duy trì thấp.  
+- 🏥 **Strategic**: Có thể mở rộng thành hệ thống liên kết quốc gia.  
 
 ---
 
-## 🤝 Review Process
+# 📚 Appendices  
 
-### Self-Review Checklist
-- [ ] **Completeness**: All 8 sections completed thoroughly
-- [ ] **Technical Accuracy**: All technical details verified
-- [ ] **Business Viability**: ROI calculation realistic
-- [ ] **Implementation Feasibility**: Timeline và resources realistic
-- [ ] **Professional Quality**: Writing và visuals professional-grade
-
-### Peer Review Process
-1. **Exchange**: Swap proposals với 1-2 peers
-2. **Review**: Provide detailed feedback using rubric
-3. **Discuss**: 30-minute discussion session
-4. **Iterate**: Incorporate feedback và improve
-
-### Mentor Review
-1. **Initial Submission**: Submit draft for initial feedback
-2. **Feedback Session**: 1-hour review meeting
-3. **Revision**: Address feedback và resubmit
-4. **Final Review**: Final approval meeting
+- **A. Technical Specs** – ERD, API endpoints, matrix.  
+- **B. Cost Calculations** – AWS Pricing breakdown.  
+- **C. Architecture Diagrams** – Logical + Physical views.  
+- **D. Medical Compliance** – HIPAA & blood safety.  
+- **E. References** – AWS docs, case studies, research.  
 
 ---
-
----
-
-**🎯 Remember**: Your proposal should demonstrate not just technical knowledge, but also business acumen và strategic thinking. This is your opportunity to showcase your potential as a future cloud architect và business consultant!
-
----
-
-*Hướng dẫn này sẽ giúp bạn tạo ra một project proposal chất lượng cao, thể hiện được khả năng technical và business analysis của một cloud professional.*
