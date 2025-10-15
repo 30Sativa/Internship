@@ -69,7 +69,7 @@ description: Phần mềm hỗ trợ hiến máu thông minh trên AWS Cloud
 
 ## 2. Solution Architecture
 ### Architecture Overview
-![AWS Architecture](./aws%20new.png)
+![AWS Architecture](AWSarchitecture.drawio.png)
 
 ### Các thành phần chính
 **Edge & Frontend**
