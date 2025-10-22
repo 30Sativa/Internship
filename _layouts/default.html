@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ "/assets/css/custom.css" | relative_url }}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand">
+          <span class="brand-badge">BDSS</span>
+          <div class="brand-text">
+            <div class="brand-title">{{ site.title }}</div>
+            <div class="brand-subtitle">{{ site.description }}</div>
+          </div>
+        </div>
+        <nav class="header-nav">
+          <a class="nav-link" href="{{ '/' | relative_url }}">Home</a>
+          <a class="nav-link" href="#contents">Mục lục</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">Khám phá nội dung</div>
+        <nav class="toc" id="js-toc">
+          <!-- JS will inject the table of contents here based on headings -->
+        </nav>
+      </aside>
+      <section class="content">
+        <div class="content-inner">
+          {{ content }}
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span>© {{ site.title }} — Built with Jekyll</span>
+      </div>
+    </footer>
+
+    <script src="{{ "/assets/js/toc.js" | relative_url }}"></script>
+  </body>
+  </html>
+
+
