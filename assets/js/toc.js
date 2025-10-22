@@ -7,14 +7,22 @@
     if (!toc) return;
     toc.innerHTML = '';
 
+    var counter = { h1: 0, h2: 0, h3: 0 };
     headings.forEach(function (h, idx) {
+      if (h.tagName === 'H1') { counter.h1++; counter.h2 = 0; counter.h3 = 0; }
+      if (h.tagName === 'H2') { counter.h2++; counter.h3 = 0; }
+      if (h.tagName === 'H3') { counter.h3++; }
       if (!h.id) {
         h.id = 'h-' + idx + '-' + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
       }
       var a = document.createElement('a');
       a.href = '#' + h.id;
-      a.textContent = h.textContent;
-      a.className = 'toc-link level-' + h.tagName.toLowerCase();
+      var prefix = '';
+      if (h.tagName === 'H1') prefix = counter.h1 + '. ';
+      if (h.tagName === 'H2') prefix = counter.h1 + '.' + counter.h2 + ' ';
+      if (h.tagName === 'H3') prefix = counter.h1 + '.' + counter.h2 + '.' + counter.h3 + ' ';
+      a.textContent = (prefix + h.textContent).trim();
+      a.className = 'level-' + h.tagName.toLowerCase();
       toc.appendChild(a);
     });
 

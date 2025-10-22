@@ -29,12 +29,22 @@
 
     <main class="layout">
       <aside class="sidebar" id="sidebar">
+        <div class="aws-logo">AWS</div>
+        <div class="search-box"><input type="search" placeholder="Search..." /></div>
         <div class="sidebar-header">Khám phá nội dung</div>
         <nav class="toc" id="js-toc">
           <!-- JS will inject the table of contents here based on headings -->
         </nav>
       </aside>
       <section class="content">
+        <div class="breadcrumb">
+          <div class="container bc-inner">
+            <span class="bc-icon">▦</span>
+            <a href="{{ '/' | relative_url }}">Hành trình đầu tiên lên Mây</a>
+            <span class="bc-sep">›</span>
+            <span>{{ page.title | default: site.title }}</span>
+          </div>
+        </div>
         <div class="content-inner">
           {{ content }}
         </div>
