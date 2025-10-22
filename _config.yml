@@ -1,4 +1,5 @@
-theme: jekyll-theme-cayman
 title: "Blood Donation Support System (BDSS)"
 description: "Phần mềm hỗ trợ hiến máu thông minh trên AWS Cloud"
 markdown: GFM
+theme: null
+plugins: []
