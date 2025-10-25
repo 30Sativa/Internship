@@ -1,51 +1,83 @@
-## Using root-relative base by default makes local testing easier.
-## Note: if you deploy to a GitHub project page (username.github.io/repo/),
-## set baseURL to the full URL for that site or use --baseURL at build time.
-baseURL = "/"
+# ==============================
+# 🌍 BASE CONFIGURATION
+# ==============================
+
+# Khi deploy lên GitHub Pages, baseURL PHẢI là URL đầy đủ
+baseURL = "https://30sativa.github.io/Internship/"
+# Giữ relativeURLs/canonifyURLs = true để khi test local vẫn ổn
 relativeURLs = true
 canonifyURLs = true
 
-# Change the default theme to be use when building the site with Hugo
+# Theme đang dùng
 theme = "hugo-theme-learn"
 
-# For search functionality
-[outputs]
-home = [ "HTML", "RSS", "JSON"]
+# ==============================
+# 🌐 MULTILINGUAL CONFIGURATION
+# ==============================
 
+defaultContentLanguage = "en"                 # Ngôn ngữ mặc định
+defaultContentLanguageInSubdir = true         # Hugo build ra /en/ và /vi/
+enableMissingTranslationPlaceholders = false  # Không hiển thị cảnh báo thiếu dịch
+
+# Nếu bạn muốn ngược lại (tiếng Việt là mặc định):
+# defaultContentLanguage = "vi"
+# defaultContentLanguageInSubdir = true
+
+# ==============================
+# 🔎 SEARCH & OUTPUT SETTINGS
+# ==============================
+[outputs]
+home = [ "HTML", "RSS", "JSON" ]
+
+# ==============================
+# 🎨 THEME PARAMETERS
+# ==============================
 [params]
-  # Change default color scheme with a variant one. Can be "red", "blue", "green".
-  themeVariant = "workshop"
-  # Git hub repo link
+  themeVariant = "workshop"        # Giữ theme màu như bạn đã dùng
   editURL = ""
-  description = ""
-  author = "thienlh@thienlu.com"
+  description = "Internship Project Documentation"
+  author = "Mai Van Thanh"
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false
-  
-[Languages]
-[Languages.en]
-title = "Internship Report"
-weight = 1
-languageName = "English"
+  showLanguageSelector = true      # 👈 bật menu chọn ngôn ngữ (EN / VI)
 
-[[Languages.en.menu.shortcuts]]
-name = "<i class='fab fa-facebook'></i> AWS Study Group"
-identifier = "AWS Study Group FB"
-url = "https://www.facebook.com/groups/awsstudygroupfcj/"
-weight = 20
+# ==============================
+# 🗣️ LANGUAGES CONFIG
+# ==============================
+[languages]
 
-[Languages.vi]
-title = "Báo cáo thực tập"
-weight = 2
-languageName = "Tiếng Việt"
+  [languages.en]
+    title = "Internship Report"
+    weight = 1
+    languageName = "English"
+    languageCode = "en"
+    contentDir = "content"         # Hugo mặc định lấy nội dung ở content/
+    languageDirection = "ltr"
 
-[[Languages.vi.menu.shortcuts]]
-name = "<i class='fab fa-facebook'></i> AWS Study Group"
-identifier = "AWS Study Group FB"
-url = "https://www.facebook.com/groups/awsstudygroupfcj/"
-weight = 20
+    [[languages.en.menu.shortcuts]]
+      name = "<i class='fab fa-facebook'></i> AWS Study Group"
+      identifier = "AWS Study Group FB"
+      url = "https://www.facebook.com/groups/awsstudygroupfcj/"
+      weight = 20
 
+  [languages.vi]
+    title = "Báo cáo Thực tập"
+    weight = 2
+    languageName = "Tiếng Việt"
+    languageCode = "vi"
+    contentDir = "content/vi"      # Hugo sẽ load nội dung từ thư mục content/vi
+    languageDirection = "ltr"
+
+    [[languages.vi.menu.shortcuts]]
+      name = "<i class='fab fa-facebook'></i> AWS Study Group"
+      identifier = "AWS Study Group FB"
+      url = "https://www.facebook.com/groups/awsstudygroupfcj/"
+      weight = 20
+
+# ==============================
+# 🧩 MARKDOWN SETTINGS
+# ==============================
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
