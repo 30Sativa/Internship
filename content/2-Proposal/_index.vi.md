@@ -1,5 +1,5 @@
 ---
-title: "Blood Donation Support System"
+title: "2. Proposal"
 date: "2025-10-25"
 weight: 2
 chapter: false
@@ -58,58 +58,86 @@ Nếu không có giải pháp, cơ sở y tế tiếp tục **chậm xử lý ca
 
 ---
 
+
 ### 3. Kiến trúc giải pháp
 
 #### 🏗️ Tổng quan kiến trúc
 
 ![AWS Architecture](/images/2-Proposal/awsnew.jpg)
 
-Hệ thống được thiết kế theo mô hình **3-tier AWS Cloud Architecture**, gồm:
+Hệ thống được triển khai trên một VPC AWS theo mô hình 3-tier với phân tầng rõ ràng giữa edge (CDN/DNS), layer ứng dụng và layer dữ liệu. Thiết kế phản ánh sơ đồ kiến trúc: public subnet chứa các tài nguyên edge (ALB, NAT gateway, Internet Gateway), private subnet chứa application servers và dữ liệu (EC2 / Auto Scaling group, RDS/SQL Server, ElastiCache). Ngoài ra có các thành phần quản lý sự kiện và giám sát (CloudWatch, EventBridge, SNS) như trong hình.
 
-##### 1️⃣ Edge & Frontend Layer
+Kiến trúc chính gồm:
 
-- **Amazon CloudFront** – CDN phân phối nội dung web.
-- **Amazon S3 (Frontend)** – Lưu ReactJS SPA, CSS, JS.
-- **Amazon Cognito** – Quản lý đăng nhập, phân quyền (Donor, Requester, Staff, Admin).
+1️⃣ Edge & Delivery
 
-##### 2️⃣ Application & API Layer
+- **Amazon Route 53** – DNS, tên miền và record routing.
+- **Amazon CloudFront** – CDN để phân phối React SPA và tĩnh assets.
+- **Amazon S3** – Lưu frontend (SPA) và lưu trữ tĩnh/backup.
+- **AWS WAF** – Bảo vệ lớp ứng dụng (đặt trước CloudFront/ALB).
 
-- **Amazon EC2** – Host .NET Web API xử lý logic nghiệp vụ.
-- **AWS Lambda** – Task automation & blood-matching engine.
-- **AWS Location Service** – Tìm người hiến gần nhất qua GPS.
-- **Amazon SNS / Pinpoint** – Gửi SMS/email khi có ca khẩn.
+2️⃣ Network & Load Balancing
+
+- **Internet Gateway** + **Public Subnets** – public endpoints (ALB, NAT gateway).
+- **Application Load Balancer (ALB)** – phân phối traffic đến Auto Scaling group của application servers (EC2).
+- **NAT Gateway** – cho phép instances trong private subnet truy cập internet để cập nhật/ghi log ra S3.
+
+3️⃣ Application & Integration
+
+- **EC2 (Auto Scaling)** – Chạy .NET Web API (các instance đặt trong private subnets).
+- **Amazon EventBridge** – bus sự kiện để định tuyến event từ ứng dụng, CloudWatch và các dịch vụ AWS tới các consumers/notification.
+- **Amazon SNS** – channel gửi thông báo (SMS, email) và kết nối với EventBridge cho alerting.
+- **AWS Cognito** – xác thực và phân quyền người dùng (Donor, Requester, Staff, Admin).
+- **AWS Location Service** – tìm/khớp người hiến theo vị trí.
 
 ##### 3️⃣ Data & Analytics Layer
 
-- **SQL Server (EC2)** – Lưu hồ sơ, nhóm máu, ca hiến, tồn kho.
-- **Amazon S3 (Data)** – Lưu logs, chứng nhận, báo cáo.
-- **Amazon QuickSight** – Dashboard realtime & thống kê hiệu suất.
+- **Amazon RDS (SQL Server)** – Managed relational DB trong private subnet (Multi-AZ) để lưu hồ sơ, nhóm máu, ca hiến, tồn kho. Nếu cần quản lý trực tiếp có thể dùng SQL Server trên EC2, nhưng khuyến nghị RDS cho HA/backup dễ dàng.
+- **Amazon ElastiCache (Redis)** – cache cho session, cơ chế matching nhanh, giảm tải DB.
+- **Amazon S3 (Data)** – lưu logs, chứng nhận, báo cáo, backup.
+
+5️⃣ Monitoring, Logging & CI/CD
+
+- **Amazon CloudWatch** – logs, metrics, alarms.
+- **EventBridge → SNS** – chuỗi xử lý logs/alerts (log/metric → EventBridge rules → SNS notifications).
+- **GitHub Actions** – CI/CD pipeline, deploy lên Auto Scaling group / RDS.
 
 #### 🔧 Dịch vụ AWS sử dụng
 
-| Service              | Vai trò                           |
-| -------------------- | --------------------------------- |
-| **EC2**              | Chạy .NET API & SQL Server        |
-| **S3**               | Lưu ảnh, tài liệu, chứng nhận     |
-| **Cognito**          | Xác thực và phân quyền            |
-| **Lambda**           | Tác vụ tự động, nhắc nhở          |
-| **SNS / Pinpoint**   | Gửi thông báo khẩn cấp            |
-| **Location Service** | Định vị & tìm người hiến gần nhất |
-| **QuickSight**       | Dashboard phân tích dữ liệu       |
+| Service                | Vai trò / Ghi chú                                                       |
+| ---------------------- | ----------------------------------------------------------------------- |
+| **Route 53**           | DNS và routing                                                          |
+| **CloudFront**         | CDN cho SPA, kết hợp WAF để bảo vệ ứng dụng                             |
+| **S3**                 | Lưu frontend, logs, backup, tài liệu y tế                               |
+| **ALB (Application LB)**| Phân phối HTTP/HTTPS tới Auto Scaling group                             |
+| **NAT Gateway**        | Cho phép truy cập internet từ private subnet                            |
+| **EC2 (ASG)**          | Chạy .NET API (private subnets)                                         |
+| **RDS (SQL Server)**   | Managed DB trong private subnet (Multi-AZ)                              |
+| **ElastiCache (Redis)**| Cache / session / hỗ trợ matching nhanh                                 |
+| **Cognito**            | Auth & RBAC                                                              |
+| **EventBridge**        | Bus sự kiện, integration giữa services & rule-based routing              |
+| **SNS**                | Notifications (SMS, email) và topic để subscribe alert channels         |
+| **CloudWatch**         | Logs, metrics, alarm và đưa vào EventBridge                             |
+| **WAF**                | Bảo vệ ứng dụng (đặt trước CloudFront/ALB)                              |
+| **Location Service**   | Tìm kiếm người hiến theo vị trí (geospatial)                            |
+| **QuickSight**         | (Optional) Dashboard & báo cáo                                          |
 
-#### 🔐 Kiến trúc bảo mật
+#### 🔐 Kiến trúc bảo mật (cập nhật)
 
-- **AWS Cognito**: JWT + RBAC
-- **IAM Roles chi tiết** cho Lambda, S3, SES
-- **HTTPS + AWS WAF** cho API Gateway
-- **Mã hóa dữ liệu y tế (AES-256)** khi nghỉ và khi truyền tải
-- Tuân thủ **HIPAA compliance**
+- **VPC isolation**: private subnets cho DB và cache; security groups hạn chế theo port/role.
+- **TLS everywhere**: CloudFront/ALB terminate TLS, backend kết nối nội bộ qua HTTPS.
+- **AWS WAF**: chính sách chống OWASP, rate limiting.
+- **IAM roles & least privilege** cho EC2, RDS snapshots, Lambda (nếu có), EventBridge.
+- **Encryption**: EBS/RDS/S3 được mã hóa (AES-256 / KMS), dữ liệu y tế mã hóa khi nghỉ và truyền tải.
+- **Audit & Logging**: CloudWatch logs + EventBridge rules để ghi lại và forward sang SNS/alerting.
 
-#### ⚙️ Thiết kế khả năng mở rộng
+#### ⚙️ Thiết kế khả năng mở rộng 
 
-- EC2 Auto Scaling + Multi-AZ database
-- S3, SNS, AppSync auto-scale
-- PostGIS indexing cho tìm kiếm địa lý nhanh
+- ALB + EC2 Auto Scaling cho application layer
+- RDS Multi-AZ + read replicas (nếu cần để scale đọc)
+- ElastiCache scale-out cho cache layer
+- CloudFront + S3 để giảm tải origin
+- Event-driven integration (EventBridge) giúp tách services và cải thiện khả năng mở rộng
 
 ---
 
@@ -130,7 +158,6 @@ Hệ thống được thiết kế theo mô hình **3-tier AWS Cloud Architectur
 
 - EC2 t3.small (API + DB)
 - S3 (10GB storage)
-- Lambda 256MB (auto reminders)
 - SES/SNS 5.000+ messages/tháng
 
 #### 🧠 Phương pháp phát triển
@@ -177,8 +204,7 @@ Hệ thống được thiết kế theo mô hình **3-tier AWS Cloud Architectur
 | S3 Storage (10GB)   | ~$3                 |
 | Cognito             | ~$0 (Free 50k MAU)  |
 | SNS/SES (5k alerts) | ~$8                 |
-| Lambda              | ~$4                 |
-| **Tổng cộng**       | **~$30–35 / tháng** |
+| **Tổng cộng**       | **~$25–30 / tháng** |
 
 📊 **ROI**: Giảm 70% chi phí quản lý thủ công (~100 USD/tháng) → Hoàn vốn sau **6 tháng**.
 

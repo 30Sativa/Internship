@@ -1,5 +1,5 @@
 ---
-title: "Blood Donation Support System"
+title: "2. Proposal"
 date: "2025-10-25"
 weight: 2
 chapter: false
@@ -58,58 +58,86 @@ Without a digital solution, healthcare organizations will continue to **delay em
 
 ---
 
+
 ### 3. Solution Architecture
 
 #### 🏗️ Architecture Overview
 
 ![AWS Architecture](/images/2-Proposal/awsnew.jpg)
 
-The system is designed following a **3-tier AWS Cloud Architecture**, including:
+The system is deployed inside an AWS VPC following a 3-tier design with clear separation between edge (CDN/DNS), application, and data layers. The diagram shows public subnets hosting edge resources (ALB, NAT Gateway, Internet Gateway) and private subnets hosting application servers and data (EC2 Auto Scaling group, RDS/SQL Server, ElastiCache). Monitoring and event services (CloudWatch, EventBridge, SNS) are used for logging and alerting.
 
-##### 1️⃣ Edge & Frontend Layer
+Core architecture components:
 
-- **Amazon CloudFront** – CDN for fast global content delivery.
-- **Amazon S3 (Frontend)** – Hosts ReactJS SPA, CSS, and JS assets.
-- **Amazon Cognito** – Manages authentication and role-based access (Donor, Requester, Staff, Admin).
+1️⃣ Edge & Delivery
 
-##### 2️⃣ Application & API Layer
+- **Amazon Route 53** – DNS and domain routing.
+- **Amazon CloudFront** – CDN to deliver the React SPA and static assets.
+- **Amazon S3** – Hosts frontend (SPA) and stores static backups / artifacts.
+- **AWS WAF** – Application layer protection (deployed in front of CloudFront/ALB).
 
-- **Amazon EC2** – Hosts the .NET Web API to handle business logic.
-- **AWS Lambda** – Automates background tasks and powers the blood-matching engine.
-- **AWS Location Service** – Finds nearby donors based on GPS coordinates.
-- **Amazon SNS / Pinpoint** – Sends SMS and email alerts for emergency cases.
+2️⃣ Network & Load Balancing
 
-##### 3️⃣ Data & Analytics Layer
+- **Internet Gateway** + **Public Subnets** – expose public endpoints (ALB, NAT Gateway).
+- **Application Load Balancer (ALB)** – distributes HTTP/HTTPS traffic to the application Auto Scaling group.
+- **NAT Gateway** – enables private subnet instances to access the internet for updates and outbound integrations.
 
-- **SQL Server (EC2)** – Stores donor records, blood groups, donation history, and inventory data.
-- **Amazon S3 (Data)** – Stores logs, certificates, and reports.
-- **Amazon QuickSight** – Provides real-time dashboards and performance analytics.
+3️⃣ Application & Integration
+
+- **EC2 (Auto Scaling)** – run the .NET Web API in private subnets.
+- **Amazon EventBridge** – event bus to route application events, CloudWatch alarms and integrate with downstream consumers.
+- **Amazon SNS** – notification channel for SMS/email; integrated with EventBridge for alerting workflows.
+- **AWS Cognito** – user authentication and RBAC (Donor, Requester, Staff, Admin).
+- **AWS Location Service** – geospatial search to find/match nearby donors.
+
+4️⃣ Data & Caching
+
+- **Amazon RDS (SQL Server)** – managed relational DB in private subnets (Multi-AZ) for donor records, blood groups, donation history, inventory. While SQL Server on EC2 is possible, RDS is recommended for HA, backups and simpler management.
+- **Amazon ElastiCache (Redis)** – caching for sessions and fast matching operations to reduce DB load.
+- **Amazon S3 (Data)** – stores logs, certificates, reports and backups.
+
+5️⃣ Monitoring, Logging & CI/CD
+
+- **Amazon CloudWatch** – logs, metrics and alarms.
+- **EventBridge → SNS** – pipeline to handle logs/alerts (CloudWatch metrics or app events → EventBridge rules → SNS topics → subscribers).
+- **GitHub Actions** – CI/CD pipeline to build, test and deploy application artifacts to the Auto Scaling group and manage infra changes.
 
 #### 🔧 AWS Services Used
 
-| Service              | Role                                       |
-| -------------------- | ------------------------------------------ |
-| **EC2**              | Hosts .NET API & SQL Server                |
-| **S3**               | Stores images, certificates, and documents |
-| **Cognito**          | Handles authentication and authorization   |
-| **Lambda**           | Executes automated and scheduled tasks     |
-| **SNS / Pinpoint**   | Sends emergency notifications              |
-| **Location Service** | Locates nearest donors                     |
-| **QuickSight**       | Provides data visualization and analytics  |
+| Service                | Role / Notes                                                            |
+| ---------------------- | ------------------------------------------------------------------------ |
+| **Route 53**           | DNS and routing                                                           |
+| **CloudFront**         | CDN for SPA, combined with WAF for edge protection                        |
+| **S3**                 | Frontend hosting, logs, backups, and document storage                      |
+| **ALB (Application LB)**| HTTP/HTTPS load balancing to Auto Scaling group                           |
+| **NAT Gateway**        | Outbound internet for private subnet instances                            |
+| **EC2 (ASG)**          | Hosts .NET API (in private subnets)                                       |
+| **RDS (SQL Server)**   | Managed DB (Multi-AZ) for core data                                        |
+| **ElastiCache (Redis)**| Cache/session store to accelerate matching                                 |
+| **Cognito**            | Authentication & RBAC                                                      |
+| **EventBridge**        | Event bus for decoupled integrations and rule-based routing                |
+| **SNS**                | Notifications (SMS, email) and topic subscription                          |
+| **CloudWatch**         | Logs, metrics, alarms; integrates with EventBridge                         |
+| **WAF**                | Protects application layer (CloudFront/ALB)                                |
+| **Location Service**   | Geospatial search for nearest donors                                       |
+| **QuickSight**         | Optional: dashboards and reporting                                         |
 
-#### 🔐 Security Architecture
+#### 🔐 Security Architecture 
 
-- **AWS Cognito**: JWT-based authentication with RBAC.
-- **Granular IAM Roles** for Lambda, S3, and SES.
-- **HTTPS + AWS WAF** for API protection.
-- **AES-256 encryption** for sensitive medical data at rest and in transit.
-- Fully compliant with **HIPAA standards**.
+- **VPC isolation**: keep DB and cache in private subnets; use Security Groups to limit traffic by role/port.
+- **TLS everywhere**: terminate TLS at CloudFront/ALB, use HTTPS for internal service calls where applicable.
+- **AWS WAF**: OWASP rules, rate limiting and IP protections.
+- **IAM least privilege**: fine-grained IAM roles for EC2, RDS snapshots, Lambda (if used), EventBridge rules.
+- **Encryption**: EBS/RDS/S3 encrypted with KMS (AES-256); sensitive medical data encrypted at rest and in transit.
+- **Audit & Logging**: CloudWatch Logs + EventBridge rules to capture and forward auditable events to SNS/alerting or long-term storage.
 
-#### ⚙️ Scalability Design
+#### ⚙️ Scalability Design 
 
-- EC2 Auto Scaling and Multi-AZ database deployment.
-- Auto-scaling enabled for S3, SNS, and AppSync.
-- PostGIS spatial indexing for optimized geolocation queries.
+- ALB + EC2 Auto Scaling for the application layer.
+- RDS Multi-AZ + read replicas for read scalability if needed.
+- ElastiCache cluster scale-out for cache layer.
+- CloudFront + S3 to reduce origin load.
+- Event-driven integration (EventBridge) to decouple components and scale processing independently.
 
 ---
 
@@ -130,7 +158,6 @@ The system is designed following a **3-tier AWS Cloud Architecture**, including:
 
 - EC2 t3.small (API + DB)
 - S3 (10 GB storage)
-- Lambda 256 MB (auto reminders)
 - SES/SNS 5,000+ messages/month
 
 #### 🧠 Development Approach
@@ -177,8 +204,7 @@ The system is designed following a **3-tier AWS Cloud Architecture**, including:
 | S3 Storage (10 GB)  | ~$3                 |
 | Cognito             | ~$0 (Free 50k MAUs) |
 | SNS/SES (5k alerts) | ~$8                 |
-| Lambda              | ~$4                 |
-| **Total**           | **~$30–35/month**   |
+| **Total**           | **~$25–30/month**   |
 
 📊 **ROI:** Reduces 70% of manual management costs (~$100/month) → Break-even within **6 months**.
 
