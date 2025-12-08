@@ -16,9 +16,8 @@ The system is built on a **3-tier AWS Cloud architecture**, including:
 
 - **Frontend**: Modern ReactJS SPA supporting location-based search and donation management.
 - **Backend**: C# .NET Web API handling medical workflows, REST APIs, and matching algorithms.
-- **Database**: SQL Server hosted on EC2 (PostGIS enabled for geolocation data).
+- **Database**: SQL Server hosted on EC2 or RDS
 - **Auth**: AWS Cognito for authentication and user role management.
-- **Realtime**: AWS AppSync (GraphQL Subscriptions) for emergency alerts and real-time notifications.
 - **Notifications**: AWS SNS/SES for urgent alerts and emails.
 - **Storage**: Amazon S3 for storing medical records and documents.
 
@@ -57,7 +56,6 @@ Most healthcare centers still manage blood donations manually — via phone call
 Without a digital solution, healthcare organizations will continue to **delay emergency response** and **manage inventory inefficiently**, directly affecting patient survival rates.
 
 ---
-
 
 ### 3. Solution Architecture
 
@@ -104,25 +102,25 @@ Core architecture components:
 
 #### 🔧 AWS Services Used
 
-| Service                | Role / Notes                                                            |
-| ---------------------- | ------------------------------------------------------------------------ |
-| **Route 53**           | DNS and routing                                                           |
-| **CloudFront**         | CDN for SPA, combined with WAF for edge protection                        |
-| **S3**                 | Frontend hosting, logs, backups, and document storage                      |
-| **ALB (Application LB)**| HTTP/HTTPS load balancing to Auto Scaling group                           |
-| **NAT Gateway**        | Outbound internet for private subnet instances                            |
-| **EC2 (ASG)**          | Hosts .NET API (in private subnets)                                       |
-| **RDS (SQL Server)**   | Managed DB (Multi-AZ) for core data                                        |
-| **ElastiCache (Redis)**| Cache/session store to accelerate matching                                 |
-| **Cognito**            | Authentication & RBAC                                                      |
-| **EventBridge**        | Event bus for decoupled integrations and rule-based routing                |
-| **SNS**                | Notifications (SMS, email) and topic subscription                          |
-| **CloudWatch**         | Logs, metrics, alarms; integrates with EventBridge                         |
-| **WAF**                | Protects application layer (CloudFront/ALB)                                |
-| **Location Service**   | Geospatial search for nearest donors                                       |
-| **QuickSight**         | Optional: dashboards and reporting                                         |
+| Service                  | Role / Notes                                                |
+| ------------------------ | ----------------------------------------------------------- |
+| **Route 53**             | DNS and routing                                             |
+| **CloudFront**           | CDN for SPA, combined with WAF for edge protection          |
+| **S3**                   | Frontend hosting, logs, backups, and document storage       |
+| **ALB (Application LB)** | HTTP/HTTPS load balancing to Auto Scaling group             |
+| **NAT Gateway**          | Outbound internet for private subnet instances              |
+| **EC2 (ASG)**            | Hosts .NET API (in private subnets)                         |
+| **RDS (SQL Server)**     | Managed DB (Multi-AZ) for core data                         |
+| **ElastiCache (Redis)**  | Cache/session store to accelerate matching                  |
+| **Cognito**              | Authentication & RBAC                                       |
+| **EventBridge**          | Event bus for decoupled integrations and rule-based routing |
+| **SNS**                  | Notifications (SMS, email) and topic subscription           |
+| **CloudWatch**           | Logs, metrics, alarms; integrates with EventBridge          |
+| **WAF**                  | Protects application layer (CloudFront/ALB)                 |
+| **Location Service**     | Geospatial search for nearest donors                        |
+| **QuickSight**           | Optional: dashboards and reporting                          |
 
-#### 🔐 Security Architecture 
+#### 🔐 Security Architecture
 
 - **VPC isolation**: keep DB and cache in private subnets; use Security Groups to limit traffic by role/port.
 - **TLS everywhere**: terminate TLS at CloudFront/ALB, use HTTPS for internal service calls where applicable.
@@ -131,7 +129,7 @@ Core architecture components:
 - **Encryption**: EBS/RDS/S3 encrypted with KMS (AES-256); sensitive medical data encrypted at rest and in transit.
 - **Audit & Logging**: CloudWatch Logs + EventBridge rules to capture and forward auditable events to SNS/alerting or long-term storage.
 
-#### ⚙️ Scalability Design 
+#### ⚙️ Scalability Design
 
 - ALB + EC2 Auto Scaling for the application layer.
 - RDS Multi-AZ + read replicas for read scalability if needed.

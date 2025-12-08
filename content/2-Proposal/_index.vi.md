@@ -16,9 +16,8 @@ Hệ thống được xây dựng theo kiến trúc **3-tier trên AWS Cloud**, 
 
 - **Frontend**: ReactJS SPA hiện đại, hỗ trợ tìm kiếm theo vị trí và quản lý ca hiến.
 - **Backend**: C# .NET Web API xử lý nghiệp vụ y tế, REST API và matching algorithms.
-- **Database**: SQL Server triển khai trên EC2 (PostGIS cho dữ liệu vị trí).
+- **Database**: SQL Server triển khai trên EC2 hay RDS
 - **Auth**: AWS Cognito quản lý xác thực và phân quyền người dùng.
-- **Realtime**: AWS AppSync (GraphQL Subscriptions) cho cảnh báo khẩn cấp realtime.
 - **Notifications**: SNS/SES gửi thông báo và email khẩn cấp.
 - **Storage**: S3 lưu trữ hồ sơ và tài liệu y tế.
 
@@ -57,7 +56,6 @@ Các cơ sở y tế hiện nay vẫn quản lý hiến máu thủ công — g�
 Nếu không có giải pháp, cơ sở y tế tiếp tục **chậm xử lý ca khẩn cấp** và **quản lý tồn kho kém hiệu quả**, ảnh hưởng trực tiếp đến tính mạng bệnh nhân.
 
 ---
-
 
 ### 3. Kiến trúc giải pháp
 
@@ -104,23 +102,22 @@ Kiến trúc chính gồm:
 
 #### 🔧 Dịch vụ AWS sử dụng
 
-| Service                | Vai trò / Ghi chú                                                       |
-| ---------------------- | ----------------------------------------------------------------------- |
-| **Route 53**           | DNS và routing                                                          |
-| **CloudFront**         | CDN cho SPA, kết hợp WAF để bảo vệ ứng dụng                             |
-| **S3**                 | Lưu frontend, logs, backup, tài liệu y tế                               |
-| **ALB (Application LB)**| Phân phối HTTP/HTTPS tới Auto Scaling group                             |
-| **NAT Gateway**        | Cho phép truy cập internet từ private subnet                            |
-| **EC2 (ASG)**          | Chạy .NET API (private subnets)                                         |
-| **RDS (SQL Server)**   | Managed DB trong private subnet (Multi-AZ)                              |
-| **ElastiCache (Redis)**| Cache / session / hỗ trợ matching nhanh                                 |
-| **Cognito**            | Auth & RBAC                                                              |
-| **EventBridge**        | Bus sự kiện, integration giữa services & rule-based routing              |
-| **SNS**                | Notifications (SMS, email) và topic để subscribe alert channels         |
-| **CloudWatch**         | Logs, metrics, alarm và đưa vào EventBridge                             |
-| **WAF**                | Bảo vệ ứng dụng (đặt trước CloudFront/ALB)                              |
-| **Location Service**   | Tìm kiếm người hiến theo vị trí (geospatial)                            |
-| **QuickSight**         | (Optional) Dashboard & báo cáo                                          |
+| Service                  | Vai trò / Ghi chú                                               |
+| ------------------------ | --------------------------------------------------------------- |
+| **Route 53**             | DNS và routing                                                  |
+| **CloudFront**           | CDN cho SPA, kết hợp WAF để bảo vệ ứng dụng                     |
+| **S3**                   | Lưu frontend, logs, backup, tài liệu y tế                       |
+| **ALB (Application LB)** | Phân phối HTTP/HTTPS tới Auto Scaling group                     |
+| **NAT Gateway**          | Cho phép truy cập internet từ private subnet                    |
+| **EC2 (ASG)**            | Chạy .NET API (private subnets)                                 |
+| **RDS (SQL Server)**     | Managed DB trong private subnet (Multi-AZ)                      |
+| **ElastiCache (Redis)**  | Cache / session / hỗ trợ matching nhanh                         |
+| **Cognito**              | Auth & RBAC                                                     |
+| **EventBridge**          | Bus sự kiện, integration giữa services & rule-based routing     |
+| **SNS**                  | Notifications (SMS, email) và topic để subscribe alert channels |
+| **CloudWatch**           | Logs, metrics, alarm và đưa vào EventBridge                     |
+| **WAF**                  | Bảo vệ ứng dụng (đặt trước CloudFront/ALB)                      |
+| **Location Service**     | Tìm kiếm người hiến theo vị trí (geospatial)                    |
 
 #### 🔐 Kiến trúc bảo mật (cập nhật)
 
@@ -131,7 +128,7 @@ Kiến trúc chính gồm:
 - **Encryption**: EBS/RDS/S3 được mã hóa (AES-256 / KMS), dữ liệu y tế mã hóa khi nghỉ và truyền tải.
 - **Audit & Logging**: CloudWatch logs + EventBridge rules để ghi lại và forward sang SNS/alerting.
 
-#### ⚙️ Thiết kế khả năng mở rộng 
+#### ⚙️ Thiết kế khả năng mở rộng
 
 - ALB + EC2 Auto Scaling cho application layer
 - RDS Multi-AZ + read replicas (nếu cần để scale đọc)
